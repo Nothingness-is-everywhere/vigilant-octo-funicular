@@ -1,0 +1,95 @@
+/* 定义名为"MiSans"的自定义字体，字体文件路径为相对于当前CSS文件的'../font/MiSans-Regular.subset.woff2'，格式为woff */  
+@font-face {  
+  font-family: "MiSans";  
+  src: url('../font/MiSans-Regular.subset.woff2') format('woff');  
+}  
+  
+/* 定义名为"iconfont"的自定义字体，提供了三种格式的字体文件，分别是woff2、woff和truetype，浏览器会根据支持的格式选择合适的字体文件 */  
+@font-face {  
+  font-family: "iconfont";  
+  src: url('../font/iconfont.woff2') format('woff2'),  
+    url('../font/iconfont.woff') format('woff'),  
+    url('../font/iconfont.ttf') format('truetype');  
+}  
+  
+/* 定义名为.iconfont的CSS类，用于应用自定义图标字体 */  
+.iconfont {
+  font-family: "iconfont", serif !important; /* 设置字体家族为"iconfont"，并使用!important确保优先级最高 */  
+  font-size: 16px; /* 设置字体大小为16像素 */  
+  font-style: normal; /* 设置字体样式为正常 */  
+  -webkit-font-smoothing: antialiased; /* 设置WebKit内核浏览器的抗锯齿效果 */  
+  -moz-osx-font-smoothing: grayscale; /* 设置Mozilla内核浏览器的抗锯齿效果 */  
+}  
+  
+/* 以下代码定义了不同图标的CSS类，通过:before伪元素和content属性设置图标的内容，content的值是字体文件中对应的图标字符 */  
+.icon-tianjia-:before {  
+  content: "\e643";  
+}  
+  
+.icon-taobao:before {  
+  content: "\e755";  
+}  
+  
+.icon-jingdong:before {  
+  content: "\e618";  
+}  
+  
+.icon-xinlangweibo:before {  
+  content: "\e601";  
+}  
+  
+.icon-zhihu:before {  
+  content: "\e60a";  
+}  
+  
+.icon-github:before {  
+  content: "\e691";  
+}  
+  
+.icon-delete:before {  
+  content: "\e94d";  
+}  
+  
+.icon-home:before {  
+  content: "\e964";  
+}  
+  
+.icon-xiugai:before {  
+  content: "\e626";  
+}  
+  
+.icon-bilibilidonghua:before {  
+  content: "\e8b1";  
+}  
+  
+.icon-wangluo:before {  
+  content: "\e600";  
+}  
+  
+.icon-sougousousuo:before {  
+  content: "\e685";  
+}  
+  
+.icon-360sousuo:before {  
+  content: "\e64d";  
+}  
+  
+.icon-baidu:before {  
+  content: "\eb49";  
+}  
+  
+.icon-bing:before {  
+  content: "\eb4c";  
+}  
+  
+.icon-google:before {  
+  content: "\ebaa";  
+}  
+  
+.icon-shezhi:before {  
+  content: "\e634";  
+}  
+  
+.icon-sousuo:before {  
+  content: "\e635";  
+}

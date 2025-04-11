@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" charset="UTF-8"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/determine.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <title>登录页</title>
+</head>
+<body>
+    <div class="container right-panel-active">
+        <div class="container__form container--signup">
+            <form class="form" id="form1">
+                <h2 class="form__title">注册</h2>
+                <input type="text" placeholder="用户名" class="input" id="username1" required/>
+                <input type="password" placeholder="密码" class="input" id="password1" required/>
+                <input type="password" placeholder="确认密码" class="input" id="password2" required/>
+                <button class="btn" id="signUpID" type="submit">注册</button>
+            </form>
+        </div>
+        <div class="container__form container--signin">
+            <form class="form" id="form2">
+                <h2 class="form__title">登陆</h2>
+                <input type="text" placeholder="用户名" class="input" id="username2" required/>
+                <input type="password" placeholder="密码" class="input" id="password3" required/>
+                <a th:href="@{/reset-password}" class="link" id="Forgot password">忘记密码了吗？</a>
+                <button class="btn" id="signInID" type="submit">登陆</button>
+            </form>
+        </div>
+        <div class="container__overlay">
+            <div class="overlay">
+                <div class="overlay__panel overlay--left">
+                    <button class="btn" id="signIn">登陆</button>
+                </div>
+                <div class="overlay__panel overlay--right">
+                    <button class="btn" id="signUp">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/login.js}"></script>
+</body>
+</html>
