@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserMapper userMapper;
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("用户名加密失败");
         }
 
+        // 根据加密后的用户名查找用户
         User user = userMapper.findByUsername(encryptedUsername);
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
@@ -61,5 +64,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .password(user.getPassword())
                 .authorities(user.getAuthorities())
                 .build();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userMapper.findAll();
     }
 }

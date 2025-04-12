@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" charset="UTF-8"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <title>管理员页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 6px 12px;
+            margin: 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+        }
+        .edit-button {
+            background-color: #008CBA;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>管理员管理页面</h1>
+<div class="container">
+    <!-- 用户管理 -->
+    <h2>用户管理</h2>
+    <button class="add-button">添加用户</button>
+    <table>
+        <thead>
+        <tr>
+            <th>用户 ID</th>
+            <th>用户名</th>
+            <th>密码</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td>
+                <button class="edit-button">编辑</button>
+                <button class="delete-button">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <!-- 漫画管理 -->
+    <h2>漫画管理</h2>
+    <button class="add-button">添加漫画</button>
+    <table>
+        <thead>
+        <tr>
+            <th>漫画 ID</th>
+            <th>漫画名称</th>
+            <th>作者</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 这里可以使用 Thymeleaf 循环展示漫画列表 -->
+        <tr>
+            <td>1</td>
+            <td>Comic 1</td>
+            <td>Author 1</td>
+            <td>
+                <button class="edit-button">编辑</button>
+                <button class="delete-button">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <!-- 动漫管理 -->
+    <h2>动漫管理</h2>
+    <button class="add-button">添加动漫</button>
+    <table>
+        <thead>
+        <tr>
+            <th>动漫 ID</th>
+            <th>动漫名称</th>
+            <th>制作公司</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 这里可以使用 Thymeleaf 循环展示动漫列表 -->
+        <tr>
+            <td>1</td>
+            <td>Anime 1</td>
+            <td>Studio 1</td>
+            <td>
+                <button class="edit-button">编辑</button>
+                <button class="delete-button">删除</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 修改密码模态框 -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePasswordModal()">&times;</span>
+        <h2>修改密码</h2>
+        <form action="#" method="post">
+            <input type="hidden" id="userId" name="userId">
+            <label for="newPassword">新密码:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+            <button type="submit">提交</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// 打开密码模态框
+    function openPasswordModal(userId) {
+        // 将用户ID赋值给模态框中的userId输入框
+        document.getElementById('userId').value = userId;
+        // 显示密码模态框
+        document.getElementById('passwordModal').style.display = "block";
+    }
+
+// 关闭密码模态框
+    function closePasswordModal() {
+        // 获取id为passwordModal的元素
+        document.getElementById('passwordModal').style.display = "none";
+    }
+</script>
+</body>
+</html>
