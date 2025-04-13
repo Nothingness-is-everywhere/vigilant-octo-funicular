@@ -8,4 +8,7 @@ import java.util.List;
 public interface UserMapper extends JpaRepository<User, Long> {
     User findByUsername(String username);
     List<User> findAll();
+
+    int deleteUser(int userId);
+
 }

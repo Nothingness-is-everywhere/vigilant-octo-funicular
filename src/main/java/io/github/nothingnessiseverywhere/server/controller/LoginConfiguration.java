@@ -2,19 +2,19 @@ package io.github.nothingnessiseverywhere.server.controller;
 
 import io.github.nothingnessiseverywhere.server.entity.User;
 import io.github.nothingnessiseverywhere.server.service.UserService;
+import io.github.nothingnessiseverywhere.server.utils.AESEncryptionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class LoginConfiguration {
 
     private final UserService userService;
@@ -35,22 +35,17 @@ public class LoginConfiguration {
         return "login";
     }
 
-    @GetMapping("/Shunt")
-    public String login(@RequestBody User user, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("username", user.getUsername());
-        if (user.getUsername().equals("root")) {
-            return "admin";
-        }
-        return "home";
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    // 处理POST请求，注册用户
+    public ResponseEntity<String> register(User user) {
+        // 从请求体中获取用户信息
         if (userService.register(user.getUsername(), user.getPassword())) {
+            // 调用userService的register方法，注册用户
             return ResponseEntity.ok("注册成功");
+            // 返回注册成功的响应
         }
         return ResponseEntity.badRequest().body("用户名已存在");
+        // 返回用户名已存在的响应
     }
 
     @GetMapping("/home")
@@ -82,6 +77,15 @@ public class LoginConfiguration {
             return "home";
         }
         List<User> users = userService.getAllUsers(); // 从数据库获取所有用户数据
+        for (User user : users) {
+            String encryptedUsername = user.getUsername();
+            try {
+                String decryptedUsername = AESEncryptionUtil.decrypt(encryptedUsername);
+                user.setUsername(decryptedUsername);
+            } catch (Exception e) {
+                System.err.println("解密用户名时出错: " + e.getMessage());
+            }
+        }
         model.addAttribute("users", users); // 将用户数据添加到模型中
         // 返回admin页面
         return "admin";

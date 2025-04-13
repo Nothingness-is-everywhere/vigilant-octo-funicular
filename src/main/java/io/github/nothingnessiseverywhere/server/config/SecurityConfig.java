@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
@@ -24,11 +25,15 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    public SecurityConfig(UserDetailsService userDetailsService, @Lazy PasswordEncoder passwordEncoder, AuthenticationFailureHandler customAuthenticationFailureHandler) {
+    public SecurityConfig(UserDetailsService userDetailsService, @Lazy PasswordEncoder passwordEncoder,
+                          AuthenticationFailureHandler customAuthenticationFailureHandler,
+                          AuthenticationSuccessHandler customAuthenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -66,8 +71,8 @@ public class SecurityConfig {
                         .usernameParameter("username")
                         // 密码参数
                         .passwordParameter("password")
-                        // 登录成功后跳转的 URL
-                        .defaultSuccessUrl("/Shunt")
+                        // 登录成功后使用处理器进行分流
+                        .successHandler(customAuthenticationSuccessHandler)
                         // 登录失败处理
                         .failureHandler(customAuthenticationFailureHandler)
                         // 允许访问

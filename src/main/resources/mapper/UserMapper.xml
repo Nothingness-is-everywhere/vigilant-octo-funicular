@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
+<!-- 定义一个命名空间为io.github.nothingnessiseverywhere.server.mapper.UserMapper的mapper -->
 <mapper namespace="io.github.nothingnessiseverywhere.server.mapper.UserMapper">
+    <!-- 定义一个id为findAll的查询语句，返回类型为io.github.nothingnessiseverywhere.server.entity.User -->
     <select id="findAll" resultType="io.github.nothingnessiseverywhere.server.entity.User">
         SELECT * FROM users
     </select>
+    <!-- 定义一个id为deleteUser的删除语句，参数类型为int -->
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM users WHERE id = #{userId}
+    </delete>
 </mapper>
