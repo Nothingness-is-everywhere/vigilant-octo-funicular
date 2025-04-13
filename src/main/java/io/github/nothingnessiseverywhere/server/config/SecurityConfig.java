@@ -37,31 +37,47 @@ public class SecurityConfig {
     }
 
     @Bean
+    // 定义一个 SecurityFilterChain Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // 配置 CSRF 保护
         http
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(csrfTokenRepository())
                 )
+                // 配置授权请求
                 .authorizeHttpRequests(authorize -> authorize
+                        // 允许访问的 URL
                         .requestMatchers("/css/determine.css", "/css/font.css", "/js/login.js",
                                 "/font/**",
                                 "/images/favicon.ico", "/images/login1.webp","/images/login2.jpg",
                                 "/register", "/login")
                         .permitAll()
+                        // 其他请求需要认证
                         .anyRequest()
                         .authenticated()
                 )
+                // 配置表单登录
                 .formLogin(form -> form
+                        // 登录页面
                         .loginPage("/login")
+                        // 登录处理 URL
                         .loginProcessingUrl("/login")
+                        // 用户名参数
                         .usernameParameter("username")
+                        // 密码参数
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/home")
+                        // 登录成功后跳转的 URL
+                        .defaultSuccessUrl("/Shunt")
+                        // 登录失败处理
                         .failureHandler(customAuthenticationFailureHandler)
+                        // 允许访问
                         .permitAll()
                 )
+                // 配置注销
                 .logout(logout -> logout
+                        // 注销 URL
                         .logoutUrl("/logout")
+                        // 注销成功后跳转的 URL
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true) // 使会话失效
                         .deleteCookies("JSESSIONID") // 删除会话相关的 Cookie

@@ -35,7 +35,7 @@ public class LoginConfiguration {
         return "login";
     }
 
-    @PostMapping("/login")
+    @GetMapping("/Shunt")
     public String login(@RequestBody User user, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("username", user.getUsername());
