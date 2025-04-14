@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const userId = button.dataset.userId;
             if (confirm('确定要删除该用户吗？')) {
                 try {
+                    // 发送DELETE请求，删除指定用户
                     const response = await fetch(`/deleteUser/${userId}`, {
                         method: 'DELETE',
                         headers: {
@@ -142,8 +143,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             [csrfHeader]: csrfToken
                         }
                     });
+                    // 处理删除响应
                     await handleDeleteResponse(response, userId);
                 } catch (error) {
+                    // 显示错误信息
                     showError(error.message);
                 }
             }
@@ -159,11 +162,17 @@ async function handleDeleteResponse(response, userId) {
     if (response.ok && data.success) {
         // 删除成功，从表格中移除该行
         const rowToDelete = document.querySelector(`tr[data-user-id="${userId}"]`);
+        // 如果有要删除的行
         if (rowToDelete) {
+            // 删除该行
             rowToDelete.remove();
         }
+        // 弹出提示框，提示用户删除成功
         alert('用户删除成功！');
+        // 重新加载表格
+        loadTableData();
     } else {
+        // 弹出提示框，提示用户删除失败，并显示失败原因
         alert('删除用户失败：' + data.message);
     }
 }

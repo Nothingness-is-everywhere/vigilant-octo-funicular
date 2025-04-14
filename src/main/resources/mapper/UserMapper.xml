@@ -8,7 +8,7 @@
         SELECT * FROM users
     </select>
     <!-- 定义一个id为deleteUser的删除语句，参数类型为int -->
-    <delete id="deleteUser" parameterType="int">
+    <delete id="deleteById" parameterType="Long">
         DELETE FROM users WHERE id = #{userId}
     </delete>
 </mapper>

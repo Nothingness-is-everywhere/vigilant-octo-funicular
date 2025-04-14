@@ -48,7 +48,9 @@ public class User implements UserDetails {
     }
 
     @Override
+    // 重写父类方法，判断是否启用
     public boolean isEnabled() {
+        // 返回true，表示启用
         return true;
     }
 

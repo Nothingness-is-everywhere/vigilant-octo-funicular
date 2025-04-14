@@ -20,12 +20,12 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser/{userId}")
-    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable int userId) {
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long userId) {
         // 创建一个Map对象，用于存储返回结果
         Map<String, Object> result = new HashMap<>();
         try {
             // 调用服务层方法删除用户
-            boolean success = userService.deleteUser(userId);
+            boolean success = userService.deleteById(userId);
             if (success) {
                 // 如果删除成功，将success和message放入result中
                 result.put("success", true);

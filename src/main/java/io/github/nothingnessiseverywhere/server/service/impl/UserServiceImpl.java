@@ -86,8 +86,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean deleteUser(int userId) {
-        int rows = userMapper.deleteUser(userId);
-        return rows > 0;
+    public boolean deleteById(Long userId) {
+        try {
+            userMapper.deleteById(userId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

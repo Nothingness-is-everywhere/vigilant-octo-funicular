@@ -90,12 +90,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- mybatis-spring -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>3.0.3</version>
-        </dependency>
         <!-- 更新后的 MySQL 连接驱动依赖 -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -125,5 +119,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

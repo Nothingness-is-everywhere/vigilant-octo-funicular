@@ -5,16 +5,16 @@ import io.github.nothingnessiseverywhere.server.service.UserService;
 import io.github.nothingnessiseverywhere.server.utils.AESEncryptionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class LoginConfiguration {
 
     private final UserService userService;

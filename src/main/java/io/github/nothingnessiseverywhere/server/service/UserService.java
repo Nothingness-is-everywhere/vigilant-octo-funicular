@@ -8,5 +8,5 @@ public interface UserService {
     boolean register(String username, String password);
     List<User> getAllUsers();
 
-    boolean deleteUser(int userId);
+    boolean deleteById(Long userId);
 }
