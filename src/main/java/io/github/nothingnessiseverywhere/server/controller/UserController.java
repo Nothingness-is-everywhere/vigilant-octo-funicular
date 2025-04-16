@@ -3,10 +3,7 @@ package io.github.nothingnessiseverywhere.server.controller;
 import io.github.nothingnessiseverywhere.server.entity.User;
 import io.github.nothingnessiseverywhere.server.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +45,7 @@ public class UserController {
 
     @PostMapping("/register")
     // 处理POST请求，注册用户
-    public ResponseEntity<String> register(User user) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         // 从请求体中获取用户信息
         if (userService.register(user.getUsername(), user.getPassword())) {
             // 调用userService的register方法，注册用户
