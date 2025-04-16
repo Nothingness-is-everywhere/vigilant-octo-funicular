@@ -35,19 +35,6 @@ public class LoginConfiguration {
         return "login";
     }
 
-    @PostMapping("/register")
-    // 处理POST请求，注册用户
-    public ResponseEntity<String> register(User user) {
-        // 从请求体中获取用户信息
-        if (userService.register(user.getUsername(), user.getPassword())) {
-            // 调用userService的register方法，注册用户
-            return ResponseEntity.ok("注册成功");
-            // 返回注册成功的响应
-        }
-        return ResponseEntity.badRequest().body("用户名已存在");
-        // 返回用户名已存在的响应
-    }
-
     @GetMapping("/home")
     public String showHomePage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
