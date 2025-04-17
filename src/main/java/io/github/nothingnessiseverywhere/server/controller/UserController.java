@@ -2,11 +2,13 @@ package io.github.nothingnessiseverywhere.server.controller;
 
 import io.github.nothingnessiseverywhere.server.entity.User;
 import io.github.nothingnessiseverywhere.server.service.UserService;
+import io.github.nothingnessiseverywhere.server.utils.AESEncryptionUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -18,9 +20,18 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser/{userId}")
-    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable Long userId, HttpServletRequest request) {
         // 创建一个Map对象，用于存储返回结果
         Map<String, Object> result = new HashMap<>();
+        // 获取当前会话
+        HttpSession session = request.getSession();
+        // 获取当前会话中的用户名
+        User nowuser = (User) session.getAttribute("user");
+        if (userId.equals(nowuser.getId()) ^ Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
+            result.put("success", false);
+            result.put("message", "删除用户时出现错误：权限不够！");
+            return ResponseEntity.status(500).body(result);
+        }
         try {
             // 调用服务层方法删除用户
             boolean success = userService.deleteById(userId);
@@ -55,6 +66,30 @@ public class UserController {
         return ResponseEntity.badRequest().body("用户名已存在");
         // 返回用户名已存在的响应
     }
+
+    @GetMapping("/getUser/{userId}")
+    public ResponseEntity<List<User>> getUser(@PathVariable Long userId, HttpServletRequest request) {
+        // 获取用户的逻辑
+        // 获取当前会话
+        HttpSession session = request.getSession();
+        // 获取当前会话中的用户名
+        User nowuser = (User) session.getAttribute("user");
+        if (Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
+            return ResponseEntity.ok(userService.getAllUsers());
+        } else if (userId.equals(nowuser.getId())) {
+            return ResponseEntity.ok(Collections.singletonList(userService.findByUserId(userId)));
+        } else  return ResponseEntity.status(403).build();
+    }
+
+//    @PutMapping("/updateUser/{userId}")
+//    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user) {
+//        // 更新用户的逻辑
+//    }
+//
+//    @PatchMapping("/partialUpdateUser/{userId}")
+//    public ResponseEntity<String> partialUpdateUser(@PathVariable Long userId, @RequestBody Map<String, Object> updates) {
+//        // 部分更新用户的逻辑
+//    }
 
 
 }

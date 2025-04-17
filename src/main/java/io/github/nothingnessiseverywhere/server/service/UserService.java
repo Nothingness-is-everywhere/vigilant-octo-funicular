@@ -9,4 +9,6 @@ public interface UserService {
     List<User> getAllUsers();
 
     boolean deleteById(Long userId);
+
+    User findByUserId(Long userId);
 }

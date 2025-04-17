@@ -6,10 +6,7 @@ import io.github.nothingnessiseverywhere.server.utils.AESEncryptionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -36,31 +33,25 @@ public class LoginConfiguration {
     }
 
     @GetMapping("/home")
-    public String showHomePage(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
+    public String showHomePage() {
         return "home";
     }
 
     @GetMapping("/user")
-    public String showUserPage(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
+    public String showUserPage() {
         return "user";
     }
 
     @GetMapping("/admin")
     // 处理/admin请求，返回管理员页面
-    public String showAdminPage(HttpServletRequest request, Model model) {
+    public String showAdminPage(HttpServletRequest request) {
         // 获取当前会话
         HttpSession session = request.getSession();
         // 获取当前会话中的用户名
-        String username = (String) session.getAttribute("username");
+        User nowuser = (User) session.getAttribute("user");
 
         // 如果用户名不是root，则返回home页面
-        if (!username.equals("root")) {
+        if (!nowuser.getUsername().equals("root")) {
             return "home";
         }
         List<User> users = userService.getAllUsers(); // 从数据库获取所有用户数据
@@ -73,7 +64,6 @@ public class LoginConfiguration {
                 System.err.println("解密用户名时出错: " + e.getMessage());
             }
         }
-        model.addAttribute("users", users); // 将用户数据添加到模型中
         // 返回admin页面
         return "admin";
     }

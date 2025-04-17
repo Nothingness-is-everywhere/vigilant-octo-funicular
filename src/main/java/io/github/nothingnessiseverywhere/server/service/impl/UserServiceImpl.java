@@ -94,6 +94,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             e.printStackTrace();
             return false;
         }
+    }
 
+    @Override
+    public User findByUserId(Long userId) {
+        return userMapper.findByUserId(userId);
     }
 }
