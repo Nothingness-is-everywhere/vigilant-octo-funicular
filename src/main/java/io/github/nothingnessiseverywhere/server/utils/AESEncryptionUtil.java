@@ -27,7 +27,7 @@ public class AESEncryptionUtil {
             // 对加密后的字节数组进行 Base64 编码
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("加密时出错: " + e.getMessage());
             return null;
         }
     }
@@ -46,7 +46,7 @@ public class AESEncryptionUtil {
             // 将解密后的字节数组转换为字符串
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("解密时出错: " + e.getMessage());
             return null;
         }
     }

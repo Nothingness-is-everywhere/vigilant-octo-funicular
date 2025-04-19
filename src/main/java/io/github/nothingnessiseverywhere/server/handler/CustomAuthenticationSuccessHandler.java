@@ -30,6 +30,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // 使用AES加密用户名
         String encryptedUsername = AESEncryptionUtil.encrypt(username);
         User user = userMapper.findByUsername(encryptedUsername);
+        user.setUsername(username);
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         // 判断用户名是否为root

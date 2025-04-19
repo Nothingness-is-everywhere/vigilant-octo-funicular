@@ -17,4 +17,5 @@ public interface UserMapper extends JpaRepository<User, Long> {
 // 根据用户ID查找用户
     User findByUserId(Long userId);
 
+
 }

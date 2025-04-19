@@ -27,7 +27,7 @@ public class UserController {
         HttpSession session = request.getSession();
         // 获取当前会话中的用户名
         User nowuser = (User) session.getAttribute("user");
-        if (userId.equals(nowuser.getId()) ^ Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
+        if (userId.equals(nowuser.getUserId()) ^ Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
             result.put("success", false);
             result.put("message", "删除用户时出现错误：权限不够！");
             return ResponseEntity.status(500).body(result);
@@ -76,13 +76,13 @@ public class UserController {
         User nowuser = (User) session.getAttribute("user");
         if (Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
             return ResponseEntity.ok(userService.getAllUsers());
-        } else if (userId.equals(nowuser.getId())) {
+        } else if (userId.equals(nowuser.getUserId())) {
             return ResponseEntity.ok(Collections.singletonList(userService.findByUserId(userId)));
         } else  return ResponseEntity.status(403).build();
     }
 
 //    @PutMapping("/updateUser/{userId}")
-//    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user) {
+//    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
 //        // 更新用户的逻辑
 //    }
 //

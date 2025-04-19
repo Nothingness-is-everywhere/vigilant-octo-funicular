@@ -9,6 +9,6 @@
     </select>
     <!-- 定义一个id为deleteUser的删除语句，参数类型为int -->
     <delete id="deleteById" parameterType="Long">
-        DELETE FROM users WHERE id = #{userId}
+        DELETE FROM users WHERE user_id = #{user_id}
     </delete>
 </mapper>

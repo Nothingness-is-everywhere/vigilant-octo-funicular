@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userMapper.save(user);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("加密用户名时出错: " + e.getMessage());
             return false;
         }
     }
@@ -82,7 +82,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     // 获取所有用户
     @Override
     public List<User> getAllUsers() {
-        return userMapper.findAll();
+        List<User> users = userMapper.findAll();
+        for (User user : users) {
+            String encryptedUsername = user.getUsername();
+            try {
+                String decryptedUsername = AESEncryptionUtil.decrypt(encryptedUsername);
+                user.setUsername(decryptedUsername);
+            } catch (Exception e) {
+                System.err.println("解密用户名时出错: " + e.getMessage());
+            }
+        }
+        return users;
     }
 
     @Override
@@ -91,13 +101,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userMapper.deleteById(userId);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("删除用户时出错: " + e.getMessage());
             return false;
         }
     }
 
     @Override
     public User findByUserId(Long userId) {
-        return userMapper.findByUserId(userId);
+        User user = userMapper.findByUserId(userId);
+        user.setUsername(AESEncryptionUtil.decrypt(user.getUsername()));
+        return user;
+    }
+
+    @Override
+    public void UpdateUser(User user) {
+        user.setUsername(AESEncryptionUtil.encrypt(user.getUsername()));
+        userMapper.save(user);
     }
 }

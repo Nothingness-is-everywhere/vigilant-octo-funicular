@@ -54,16 +54,7 @@ public class LoginConfiguration {
         if (!nowuser.getUsername().equals("root")) {
             return "home";
         }
-        List<User> users = userService.getAllUsers(); // 从数据库获取所有用户数据
-        for (User user : users) {
-            String encryptedUsername = user.getUsername();
-            try {
-                String decryptedUsername = AESEncryptionUtil.decrypt(encryptedUsername);
-                user.setUsername(decryptedUsername);
-            } catch (Exception e) {
-                System.err.println("解密用户名时出错: " + e.getMessage());
-            }
-        }
+        userService.getAllUsers(); // 从数据库获取所有用户数据
         // 返回admin页面
         return "admin";
     }
