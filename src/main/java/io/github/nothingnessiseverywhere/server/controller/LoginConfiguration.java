@@ -2,14 +2,12 @@ package io.github.nothingnessiseverywhere.server.controller;
 
 import io.github.nothingnessiseverywhere.server.entity.User;
 import io.github.nothingnessiseverywhere.server.service.UserService;
-import io.github.nothingnessiseverywhere.server.utils.AESEncryptionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.List;
 
 @Controller
 public class LoginConfiguration {
@@ -44,7 +42,7 @@ public class LoginConfiguration {
 
     @GetMapping("/admin")
     // 处理/admin请求，返回管理员页面
-    public String showAdminPage(HttpServletRequest request) {
+    public String showAdminPage(HttpServletRequest request, Model model) {
         // 获取当前会话
         HttpSession session = request.getSession();
         // 获取当前会话中的用户名
@@ -54,7 +52,7 @@ public class LoginConfiguration {
         if (!nowuser.getUsername().equals("root")) {
             return "home";
         }
-        userService.getAllUsers(); // 从数据库获取所有用户数据
+        model.addAttribute("users", userService.getAllUsers()); // 将用户数据添加到模型中
         // 返回admin页面
         return "admin";
     }
