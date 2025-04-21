@@ -74,17 +74,29 @@ public class UserController {
         HttpSession session = request.getSession();
         // 获取当前会话中的用户名
         User nowuser = (User) session.getAttribute("user");
-        if (Objects.equals(AESEncryptionUtil.decrypt(nowuser.getUsername()), "root")) {
+        if (nowuser.getUsername().equals("root")) {
             return ResponseEntity.ok(userService.getAllUsers());
         } else if (userId.equals(nowuser.getUserId())) {
             return ResponseEntity.ok(Collections.singletonList(userService.findByUserId(userId)));
         } else  return ResponseEntity.status(403).build();
     }
 
-//    @PutMapping("/updateUser/{userId}")
-//    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
-//        // 更新用户的逻辑
-//    }
+    @PutMapping("/updateUser/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
+        if (userId.equals(user.getUserId())) {
+            return ResponseEntity.badRequest().body("用户ID不一致");
+        }
+        // 更新用户的逻辑
+        // 获取当前会话
+        HttpSession session = request.getSession();
+        // 获取当前会话中的用户名
+        User nowuser = (User) session.getAttribute("user");
+
+        if (userId.equals(nowuser.getUserId()) ^ nowuser.getUsername().equals("root")) {
+            userService.UpdateUser(user);
+            return ResponseEntity.ok("用户信息更新成功");
+        } else return ResponseEntity.badRequest().body("用户权限不足");
+    }
 //
 //    @PatchMapping("/partialUpdateUser/{userId}")
 //    public ResponseEntity<String> partialUpdateUser(@PathVariable Long userId, @RequestBody Map<String, Object> updates) {

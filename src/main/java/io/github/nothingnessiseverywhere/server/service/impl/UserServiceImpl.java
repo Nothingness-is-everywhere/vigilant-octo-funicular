@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userMapper.save(user);
             return true;
         } catch (Exception e) {
-            System.err.println("加密用户名时出错: " + e.getMessage());
+            System.err.println("添加用户名时出错: " + e.getMessage());
             return false;
         }
     }
@@ -116,6 +116,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void UpdateUser(User user) {
         user.setUsername(AESEncryptionUtil.encrypt(user.getUsername()));
-        userMapper.save(user);
+        try {
+            // 保存User对象
+            userMapper.save(user);
+        } catch (Exception e) {
+            System.err.println("添加用户名时出错: " + e.getMessage());
+        }
     }
 }

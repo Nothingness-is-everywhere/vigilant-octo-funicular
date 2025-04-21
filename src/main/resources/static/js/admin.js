@@ -70,7 +70,7 @@ function addUser(event) {
     const password = document.getElementById('addPassword').value;
 
     // 这里可以使用 fetch 或其他方式发送请求到服务器
-    fetch('/addUser', {
+    fetch('/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -83,8 +83,7 @@ function addUser(event) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 刷新页面或更新表格
-                location.reload();
+                loadTableData(data)
             } else {
                 alert('添加用户失败: ' + data.message);
             }
@@ -102,7 +101,7 @@ function editUser(event) {
     const password = document.getElementById('editPassword').value;
 
     // 这里可以使用 fetch 或其他方式发送请求到服务器
-    fetch('/editUser', {
+    fetch('/editUser/0', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -117,7 +116,7 @@ function editUser(event) {
         .then(data => {
             if (data.success) {
                 // 刷新页面或更新表格
-                location.reload();
+                loadTableData(data);
             } else {
                 alert('编辑用户失败: ' + data.message);
             }
@@ -144,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                     });
                     // 处理删除响应
-                    await handleDeleteResponse(response, userId);
+                    await  loadTableData(response);
                 } catch (error) {
                     // 显示错误信息
                     showError(error.message);
@@ -154,26 +153,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-// 异步函数，处理删除响应
-async function handleDeleteResponse(response, userId) {
+// 异步函数，更新表格
+async function  loadTableData(response) {
     // 将响应转换为JSON格式
     const data = await response.json();
     // 如果响应成功且数据成功
     if (response.ok && data.success) {
-        // 删除成功，从表格中移除该行
-        const rowToDelete = document.querySelector(`tr[data-user-id="${userId}"]`);
-        // 如果有要删除的行
-        if (rowToDelete) {
-            // 删除该行
-            rowToDelete.remove();
-        }
-        // 弹出提示框，提示用户删除成功
-        alert('用户删除成功！');
-        // 重新加载表格
-        loadTableData();
+        // 创建一个XMLHttpRequest对象
+        const xhr = new XMLHttpRequest();
+
+        // 配置请求
+        xhr.open('GET', '/getUser/0', true);
+
+        // 设置请求完成后的回调函数
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // 请求成功，解析响应数据
+                const data = JSON.parse(xhr.responseText);
+
+                // 获取表格的tbody元素
+                const tbody = document.querySelector('#user-table tbody');
+
+                // 清空tbody的内容
+                tbody.innerHTML = '';
+                // 创建新的行并添加到tbody
+                data.forEach(function(user) {
+                    const tr = document.createElement('tr');
+
+                    const tdUserId = document.createElement('td');
+                    tdUserId.textContent = user.userId;
+                    tr.appendChild(tdUserId);
+
+                    const tdUsername = document.createElement('td');
+                    tdUsername.textContent = user.username;
+                    tr.appendChild(tdUsername);
+
+                    const tdPassword = document.createElement('td');
+                    tdPassword.textContent = user.password;
+                    tr.appendChild(tdPassword);
+
+                    const tdActions = document.createElement('td');
+                    const editButton = document.createElement('button');
+                    editButton.className = 'edit-button';
+                    editButton.textContent = '编辑';
+                    editButton.addEventListener('click', openEditUserModal);
+                    tdActions.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-button';
+                    deleteButton.setAttribute('data-user-id', user.userId);
+                    deleteButton.textContent = '删除';
+                    deleteButton.addEventListener('click', function() {
+                        deleteUser(user.userId);
+                    });
+                    tdActions.appendChild(deleteButton);
+
+                    tr.appendChild(tdActions);
+
+                    tbody.appendChild(tr);
+                });
+            } else {
+                // 请求失败，处理错误
+                console.error('请求失败:', xhr.statusText);
+            }
+        };
+        // 发送请求
+        xhr.send();
     } else {
         // 弹出提示框，提示用户删除失败，并显示失败原因
-        alert('删除用户失败：' + data.message);
+        alert('失败：' + data.message);
     }
 }
 

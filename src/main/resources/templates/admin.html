@@ -17,7 +17,7 @@
     <!-- 用户管理 -->
     <h2>用户管理</h2>
     <button class="add-button">添加用户</button>
-    <table>
+    <table id="user-table">
         <thead>
         <tr>
             <th>用户 ID</th>
@@ -28,12 +28,12 @@
         </thead>
         <tbody>
         <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
+            <td th:text="${user.userId}"></td>
             <td th:text="${user.username}"></td>
             <td th:text="${user.password}"></td>
             <td>
                 <button class="edit-button">编辑</button>
-                <button class="delete-button" th:attr="data-user-id=${user.id}">删除</button>
+                <button class="delete-button" th:attr="data-user-id=${user.userId}">删除</button>
             </td>
         </tr>
         </tbody>
