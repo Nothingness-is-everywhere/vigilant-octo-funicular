@@ -13,6 +13,8 @@
 
  Date: 19/04/2025 17:40:08
 */
+create Database server;
+use server;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
