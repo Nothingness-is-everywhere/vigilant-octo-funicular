@@ -13,11 +13,11 @@
 </head>
 <body>
 <h1>管理员管理页面</h1>
-<div class="container">
+<div class="container"  id="user">
     <!-- 用户管理 -->
     <h2>用户管理</h2>
-    <button class="add-button">添加用户</button>
-    <table id="user-table">
+    <button class="add-button" @click="openAddUserModal">添加用户</button>
+    <table>
         <thead>
         <tr>
             <th>用户 ID</th>
@@ -32,12 +32,44 @@
             <td>{{user.username}}</td>
             <td>{{user.password}}</td>
             <td>
-                <button class="edit-button">编辑</button>
+                <button class="edit-button" @click="openEditUserModal(user)">编辑</button>
                 <button @click="removeUser(user)" class="delete-button">删除</button>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <!-- 添加用户模态框 -->
+    <div id="addUserModal" class="modal" v-if="isAddUserModalVisible">
+        <div class="modal-content">
+            <span class="close" @click="closeModal('addUser')">&times;</span>
+            <h2>添加用户</h2>
+            <form  id="addUserForm" @submit.prevent="addUser">
+                <label for="addUsername">用户名:</label>
+                <input type="text" id="addUsername" v-model="addUsername" required>
+                <label for="addPassword">密码:</label>
+                <input type="password" id="addPassword" v-model="addPassword" required>
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 编辑用户模态框 -->
+    <div id="editUserModal" class="modal"v-if="isEditUserModalVisible">
+        <div class="modal-content">
+            <span class="close" @click="closeModal('editUser')">&times;</span>
+            <h2>编辑用户</h2>
+            <form @submit.prevent="editUser" id="editUserForm">
+                <input type="hidden" id="editUserId" v-model="editUserId">
+                <label for="editUsername">用户名:</label>
+                <input type="text" id="editUsername" v-model="editUsername" required>
+                <label for="editPassword">密码:</label>
+                <input type="password" id="editPassword" v-model="editPassword" required>
+                <button type="submit">提交</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 <div class="container">
     <!-- 漫画管理 -->
@@ -92,37 +124,6 @@
         </tr>
         </tbody>
     </table>
-</div>
-
-<!-- 添加用户模态框 -->
-<div id="addUserModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal(event)">&times;</span>
-        <h2>添加用户</h2>
-        <form id="addUserForm" action="#" method="post">
-            <label for="addUsername">用户名:</label>
-            <input type="text" id="addUsername" name="addUsername" required>
-            <label for="addPassword">密码:</label>
-            <input type="password" id="addPassword" name="addPassword" required>
-            <button type="submit">提交</button>
-        </form>
-    </div>
-</div>
-
-<!-- 编辑用户模态框 -->
-<div id="editUserModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal(event)">&times;</span>
-        <h2>编辑用户</h2>
-        <form id="editUserForm" action="#" method="post">
-            <input type="hidden" id="editUserId" name="editUserId">
-            <label for="editUsername">用户名:</label>
-            <input type="text" id="editUsername" name="editUsername" required>
-            <label for="editPassword">密码:</label>
-            <input type="password" id="editPassword" name="editPassword" required>
-            <button type="submit">提交</button>
-        </form>
-    </div>
 </div>
 <script th:src="@{/js/vue.global.js}"></script>
 <script th:src="@{/js/admin.js}"></script>
