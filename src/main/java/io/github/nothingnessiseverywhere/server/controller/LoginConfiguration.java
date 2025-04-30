@@ -52,7 +52,6 @@ public class LoginConfiguration {
         if (!nowuser.getUsername().equals("root")) {
             return "home";
         }
-        model.addAttribute("users", userService.getAllUsers()); // 将用户数据添加到模型中
         // 返回admin页面
         return "admin";
     }
