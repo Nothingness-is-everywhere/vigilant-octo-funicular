@@ -12,74 +12,52 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
 </head>
 <body>
+<div class="bg-particles"></div>
+<div class="particles-container"></div>
+
 <div id="app">
-    <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo">动漫次元屋</h1>
-            <div class="nav-links">
-                <a href="#home" class="nav-link">首页</a>
-                <a href="#anime" class="nav-link">动漫</a>
-                <a href="#manga" class="nav-link">漫画</a>
-                <a href="#rank" class="nav-link">排行榜</a>
-            </div>
-        </div>
+        <div class="logo">AniSpace</div>
+        <input
+                type="text"
+                class="search-box"
+                placeholder="🔍 搜索你喜欢的作品..."
+                v-model="searchKeyword"
+        >
     </nav>
 
-    <!-- 轮播图 -->
-    <div class="banner-slider">
-        <div class="slider-wrapper">
+    <div class="container">
+        <div class="category-filter">
+            <button
+                    v-for="category in categories"
+                    :key="category"
+                    class="filter-btn"
+                    :class="{ active: currentCategory === category }"
+                    @click="currentCategory = category"
+            >
+                {{ category }}
+            </button>
+        </div>
+
+        <div class="grid">
             <div
-                    class="slide"
-                    v-for="(item, index) in slides"
-                    :key="index"
-                    :style="{ backgroundImage: `url(${item.image})` }"
-            ></div>
-            <div class="slider-controls">
-                <div
-                        class="dot"
-                        v-for="(_, dotIndex) in slides.length"
-                        :key="dotIndex"
-                        :class="{ active: currentSlide === dotIndex }"
-                        @click="changeSlide(dotIndex)"
-                ></div>
+                    class="card"
+                    v-for="item in filteredItems"
+                    :key="item.id"
+            >
+                <img
+                        :src="item.cover"
+                        class="card-img"
+                        alt="封面"
+                >
+                <div class="card-content">
+                    <h3 class="card-title">{{ item.title }}</h3>
+                    <p class="card-author">{{ item.author }}</p>
+                    <span class="card-type">{{ item.type }}</span>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- 推荐内容 -->
-    <main class="main-content">
-        <!-- 最新更新 -->
-        <section class="section">
-            <h2 class="section-title">最新更新</h2>
-            <div class="card-grid">
-                <div class="card" v-for="(anime, index) in newAnimes" :key="index">
-                    <img :src="anime.cover" alt="动漫封面" class="card-cover">
-                    <div class="card-content">
-                        <h3 class="card-title">{{ anime.title }}</h3>
-                        <p class="card-info">类型：{{ anime.genre }}</p>
-                        <p class="card-info">更新：第{{ anime.episodes }}话</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 热门分类 -->
-        <section class="section">
-            <h2 class="section-title">热门分类</h2>
-            <div class="category-grid">
-                <div class="category-card" v-for="(category, index) in categories" :key="index">
-                    <img :src="category.image" alt="分类图标" class="category-icon">
-                    <p class="category-name">{{ category.name }}</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- 页脚 -->
-    <footer class="footer">
-        <p>©无敌 版权所有</p>
-    </footer>
 </div>
 
 <script th:src="@{/js/vue.global.js}"></script>
