@@ -83,14 +83,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<User> getAllUsers() {
         List<User> users = userMapper.findAll();
-        for (User user : users) {
-            String encryptedUsername = user.getUsername();
-            try {
-                String decryptedUsername = AESEncryptionUtil.decrypt(encryptedUsername);
-                user.setUsername(decryptedUsername);
-            } catch (Exception e) {
-                System.err.println("解密用户名时出错: " + e.getMessage());
-            }
+        try {
+            users.forEach(user -> user.setUsername(AESEncryptionUtil.decrypt(user.getUsername())));
+        } catch (Exception e) {
+            System.err.println("解密用户名时出错: " + e.getMessage());
         }
         return users;
     }
