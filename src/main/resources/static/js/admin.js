@@ -72,7 +72,6 @@ createApp({
         function openEditUserModal(user) {
             editUserId.value = user.userId;
             editUsername.value = user.username;
-            editPassword.value = user.password;
             isEditUserModalVisible.value = true;
         }
 

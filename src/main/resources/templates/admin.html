@@ -47,9 +47,9 @@
             <h2>添加用户</h2>
             <form  id="addUserForm" @submit.prevent="addUser">
                 <label for="addUsername">用户名:</label>
-                <input type="text" id="addUsername" v-model="addUsername" required>
+                <input type="text" id="addUsername" v-model="addUsername" required  maxlength="20">
                 <label for="addPassword">密码:</label>
-                <input type="password" id="addPassword" v-model="addPassword" required>
+                <input type="password" id="addPassword" v-model="addPassword" required  maxlength="30">
                 <button type="submit">提交</button>
             </form>
         </div>
@@ -63,9 +63,9 @@
             <form @submit.prevent="editUser" id="editUserForm">
                 <input type="hidden" id="editUserId" v-model="editUserId">
                 <label for="editUsername">用户名:</label>
-                <input type="text" id="editUsername" v-model="editUsername" required>
+                <input type="text" id="editUsername" v-model="editUsername" required  maxlength="20">
                 <label for="editPassword">密码:</label>
-                <input type="password" id="editPassword" v-model="editPassword" required>
+                <input type="password" id="editPassword" v-model="editPassword" required  maxlength="30">
                 <button type="submit">提交</button>
             </form>
         </div>

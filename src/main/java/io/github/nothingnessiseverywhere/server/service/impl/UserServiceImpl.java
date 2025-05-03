@@ -111,8 +111,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void UpdateUser(User user) {
-        user.setUsername(AESEncryptionUtil.encrypt(user.getUsername()));
         try {
+            user.setUsername(AESEncryptionUtil.encrypt(user.getUsername()));
             // 保存User对象
             userMapper.save(user);
         } catch (Exception e) {

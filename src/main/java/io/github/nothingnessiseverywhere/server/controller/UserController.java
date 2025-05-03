@@ -57,6 +57,10 @@ public class UserController {
     @PostMapping("/register")
     // 处理POST请求，注册用户
     public ResponseEntity<String> register(@RequestBody User user) {
+        // 验证用户名和密码的长度
+        if (user.getUsername().length() > 20 || user.getPassword().length() > 30) {
+            return ResponseEntity.badRequest().body("用户名或密码长度过长");
+        }
         // 从请求体中获取用户信息
         if (userService.register(user.getUsername(), user.getPassword())) {
             // 调用userService的register方法，注册用户
@@ -83,6 +87,10 @@ public class UserController {
 
     @PutMapping("/updateUser/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
+        // 验证用户名和密码的长度
+        if (user.getUsername().length() > 20 || user.getPassword().length() > 30) {
+            return ResponseEntity.badRequest().body("用户名或密码长度过长");
+        }
         if (userId.equals(user.getUserId())) {
             return ResponseEntity.badRequest().body("用户ID不一致");
         }

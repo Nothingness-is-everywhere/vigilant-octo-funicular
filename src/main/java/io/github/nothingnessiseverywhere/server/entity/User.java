@@ -32,26 +32,4 @@ public class User implements UserDetails {
         return Collections.emptyList(); // 根据实际情况返回权限
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    // 重写父类方法，判断是否启用
-    public boolean isEnabled() {
-        // 返回true，表示启用
-        return true;
-    }
-
 }

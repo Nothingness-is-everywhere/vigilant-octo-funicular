@@ -31,4 +31,18 @@ CREATE TABLE `users`  (
   UNIQUE INDEX `username`(`username`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
+CREATE TABLE anime (
+                       id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '动漫ID',
+                       title VARCHAR(100) NOT NULL COMMENT '动漫名字',
+                       author VARCHAR(50) COMMENT '作者/制作公司',
+                       storage_path VARCHAR(500) NOT NULL COMMENT '视频文件存储路径'
+) COMMENT '动漫信息表';
+
+CREATE TABLE comic (
+                       id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '漫画ID',
+                       title VARCHAR(100) NOT NULL COMMENT '漫画名字',
+                       author VARCHAR(50) NOT NULL COMMENT '作者',
+                       storage_path VARCHAR(500) NOT NULL COMMENT '漫画文件存储路径'
+) COMMENT '漫画信息表';
+
 SET FOREIGN_KEY_CHECKS = 1;
