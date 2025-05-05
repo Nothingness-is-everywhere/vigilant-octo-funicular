@@ -6,7 +6,7 @@ const { createApp, ref, onMounted } = Vue;
 // 异步函数，获取数据
 async function getUsers() {
     try {
-        const response = await fetch('/getUser/0', {
+        const response = await fetch('/getUserById/0', {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json'

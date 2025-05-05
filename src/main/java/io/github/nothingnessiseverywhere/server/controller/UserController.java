@@ -71,7 +71,7 @@ public class UserController {
         // 返回用户名已存在的响应
     }
 
-    @GetMapping("/getUser/{userId}")
+    @GetMapping("/getUserById/{userId}")
     public ResponseEntity<List<User>> getUser(@PathVariable Long userId, HttpServletRequest request) {
         // 获取用户的逻辑
         // 获取当前会话
