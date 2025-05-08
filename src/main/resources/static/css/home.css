@@ -21,9 +21,6 @@
     height: 100%;
     z-index: -1;
     background: linear-gradient(160deg, #ffc8dd 20%, #b89eff 80%);
-    background-image: url("../images/home.png"),
-    linear-gradient(160deg, #ffc8dd 20%, #b89eff 80%);
-    background-size: 200px 200px, cover;
     opacity: 0.95;
 }
 

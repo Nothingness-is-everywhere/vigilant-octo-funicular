@@ -2,22 +2,34 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- 设置字符编码为UTF-8 -->
     <meta charset="UTF-8">
+    <!-- 设置视口宽度为设备宽度，初始缩放比例为1.0 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 设置CSRF令牌和头信息 -->
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>动漫次元屋</title>
+    <!-- 引入字体样式 -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <!-- 引入首页样式 -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <!-- 设置网站图标 -->
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
 </head>
 <body>
+<!-- 背景粒子效果 -->
 <div class="bg-particles"></div>
+<!-- 粒子容器 -->
 <div class="particles-container"></div>
 
+<!-- Vue应用 -->
 <div id="app">
+    <!-- 导航栏 -->
     <nav class="navbar">
+        <!-- logo -->
         <div class="logo">AniSpace</div>
+        <!-- 搜索框 -->
         <input
                 type="text"
                 class="search-box"
@@ -26,8 +38,11 @@
         >
     </nav>
 
+    <!-- 容器 -->
     <div class="container">
+        <!-- 类别过滤器 -->
         <div class="category-filter">
+            <!-- 遍历类别 -->
             <button
                     v-for="category in categories"
                     :key="category"
@@ -39,20 +54,28 @@
             </button>
         </div>
 
+        <!-- 网格 -->
         <div class="grid">
+            <!-- 遍历过滤后的作品 -->
             <div
                     class="card"
                     v-for="item in filteredItems"
                     :key="item.id"
+                    @click="goToDetail(item)"
             >
+                <!-- 封面 -->
                 <img
                         :src="item.cover"
                         class="card-img"
                         alt="封面"
                 >
+                <!-- 内容 -->
                 <div class="card-content">
+                    <!-- 标题 -->
                     <h3 class="card-title">{{ item.title }}</h3>
+                    <!-- 作者 -->
                     <p class="card-author">{{ item.author }}</p>
+                    <!-- 类型 -->
                     <span class="card-type">{{ item.type }}</span>
                 </div>
             </div>
@@ -60,7 +83,9 @@
     </div>
 </div>
 
+<!-- 引入Vue.js -->
 <script th:src="@{/js/vue.global.js}"></script>
+<!-- 引入首页脚本 -->
 <script th:src="@{/js/home.js}"></script>
 </body>
 </html>

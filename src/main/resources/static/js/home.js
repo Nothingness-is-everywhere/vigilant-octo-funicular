@@ -73,6 +73,18 @@ createApp({
             });
         });
 
+        const goToDetail = (item) => {
+            let url = '';
+            if (item.type === '动漫') {
+                url = `/home/Anime/${item.id}`;
+            } else if (item.type === '漫画') {
+                url = `/home/Comic/${item.id}`;
+            }
+            if (url) {
+                window.location.href = url;
+            }
+        };
+
         // 页面加载后生成粒子
         window.addEventListener('load', createParticles);
 
@@ -80,7 +92,8 @@ createApp({
             searchKeyword,
             categories,
             currentCategory,
-            filteredItems
+            filteredItems,
+            goToDetail
         };
     }
 }).mount('#app');
