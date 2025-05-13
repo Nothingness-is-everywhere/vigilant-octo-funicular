@@ -26,7 +26,14 @@
             <div class="player-box">
                 <div class="player-placeholder">
                     <div class="play-button" @click="playVideo">
-                        <div class="play-icon"></div>
+                        <div class="play-button" v-if="!videoElement"> <!-- 未加载时显示播放按钮 -->
+                            <div class="play-icon"></div>
+                        </div>
+                        <!-- 错误提示 -->
+                        <div v-if="error" class="absolute inset-0 bg-black/70 rounded-lg p-4 text-center">
+                            <p class="text-red-400 mb-2">{{ error }}</p>
+                            <button class="glow-btn" @click="playVideo">重试播放</button>
+                        </div>
                     </div>
                 </div>
                 <div class="player-info">
@@ -44,7 +51,6 @@
                     <div class="other-anime-thumbnail" :style="{ backgroundImage: `url(${item.thumbnail})` }"></div>
                     <div class="other-anime-info">
                         <h4>{{ item.title }}</h4>
-                        <p class="text-sm text-gray-400">{{ item.episodes }} 集</p>
                     </div>
                 </div>
             </div>

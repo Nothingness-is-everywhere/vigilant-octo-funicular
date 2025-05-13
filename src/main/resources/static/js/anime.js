@@ -14,10 +14,8 @@ const ID = document.querySelector("meta[name='ID']").getAttribute("content");
     id: 1,
     // 动漫标题
     title: '银河守护者',
-    // 动漫集数
-    episodes: '24',
     // 动漫缩略图
-    thumbnail: 'https://picsum.photos/id/237/400/600'
+    thumbnail: './images/home.png'
 }
     ]
 }
@@ -116,8 +114,36 @@ const ID = document.querySelector("meta[name='ID']").getAttribute("content");
 },
     // 播放视频
     playVideo() {
-    // 这里可以添加视频播放逻辑
-    alert('开始播放 ' + this.anime.title + ' - ' + this.currentEpisode);
+        const playerPlaceholder = document.querySelector('.player-placeholder');
+        const videoUrl = `/getAnimeById/${ID}`; // 直接使用URL参数
+
+        // 创建视频元素（如果不存在）
+        if (!this.videoElement) {
+            this.videoElement = document.createElement('video');
+            this.videoElement.controls = true; // 显示播放控件
+            this.videoElement.preload = 'auto'; // 自动预加载
+            this.videoElement.style.width = '100%';
+            this.videoElement.style.height = '100%';
+            this.videoElement.className = 'rounded-lg';
+
+            // 错误处理
+            this.videoElement.addEventListener('error', () => {
+                this.error = '视频加载失败，请检查网络或重试';
+                this.loading = false;
+            });
+        }
+
+        // 设置视频源并播放
+        this.videoElement.src = videoUrl;
+        playerPlaceholder.innerHTML = ''; // 清空占位符
+        playerPlaceholder.appendChild(this.videoElement); // 插入视频元素
+
+        // 处理播放逻辑（支持用户手动点击播放按钮）
+        this.videoElement.play().catch(error => {
+            // 现代浏览器需要用户交互才能自动播放，这里可能需要用户手动点击播放控件
+            this.error = '点击下方播放按钮开始播放';
+            console.log('自动播放失败（需用户交互）:', error);
+        });
 },
     // 返回首页
     goHome() {
