@@ -1,0 +1,313 @@
+:root {
+    --primary-1: #FF6B6B;
+    --primary-2: #4ECDC4;
+    --primary-3: #FFD166;
+    --text-lg: clamp(1.5rem, 3vw, 2.5rem);
+    --text-md: clamp(1.2rem, 2vw, 1.8rem);
+    --text-sm: clamp(0.9rem, 1.5vw, 1.1rem);
+    --space-unit: clamp(0.5rem, 1vw, 1rem);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans SC', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(
+            135deg,
+            rgba(255, 107, 107, 0.15) 0%,
+            rgba(78, 205, 196, 0.15) 100%
+    ), #1a1a1a;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* 星空背景 */
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: linear-gradient(
+            45deg,
+            rgba(26, 26, 26, 0.9),
+            rgba(17, 17, 34, 0.95)
+    );
+}
+
+/* 导航栏 */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 返回主页按钮 */
+.home-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.5rem, 1vw, 0.75rem);
+    padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.home-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+    z-index: -1;
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.home-button:hover::before {
+    left: 100%;
+}
+
+.home-icon {
+    width: clamp(1.2rem, 2vw, 1.5rem);
+    height: clamp(1.2rem, 2vw, 1.5rem);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2L2 9v13h20V9L12 2z'/%3E%3Cpath d='M9 22V12h6v10z'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+}
+
+.home-text {
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+    white-space: nowrap;
+}
+
+/* 移动端菜单按钮 */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: clamp(1.2rem, 2vw, 1.5rem);
+    height: clamp(1rem, 1.8vw, 1.25rem);
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* 渐变标题 */
+.gradient-title {
+    background: linear-gradient(90deg, var(--primary-1), var(--primary-2), var(--primary-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradient 8s ease infinite;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    font-size: var(--text-lg);
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 主内容区 */
+.container {
+    position: relative;
+    max-width: 1200px;
+    margin: clamp(5rem, 10vw, 7rem) auto 0;
+    padding: clamp(1rem, 2vw, 2rem);
+    z-index: 1;
+}
+
+/* 播放框 */
+.player-box {
+    background: var(--glass-bg);
+    border-radius: clamp(1rem, 2vw, 1.5rem);
+    padding: clamp(0.75rem, 1.5vw, 1rem);
+    backdrop-filter: blur(8px);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+}
+
+.player-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: clamp(0.75rem, 1.5vw, 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.play-button {
+    width: clamp(3rem, 8vw, 5rem);
+    height: clamp(3rem, 8vw, 5rem);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.play-icon {
+    width: 0;
+    height: 0;
+    border-top: clamp(0.75rem, 2vw, 1rem) solid transparent;
+    border-left: clamp(1.25rem, 3vw, 1.5rem) solid white;
+    border-bottom: clamp(0.75rem, 2vw, 1rem) solid transparent;
+    margin-left: clamp(0.25rem, 0.5vw, 0.3rem);
+}
+
+.player-info {
+    padding: clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.player-info h2 {
+    font-size: var(--text-md);
+}
+
+.player-info p {
+    font-size: var(--text-sm);
+    margin-top: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+/* 标签样式 */
+.tag {
+    display: inline-block;
+    padding: clamp(0.25rem, 0.5vw, 0.3rem) clamp(0.75rem, 1.5vw, 1rem);
+    background: var(--primary-2);
+    border-radius: 24px;
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+    margin: clamp(0.5rem, 1vw, 0.75rem) clamp(0.25rem, 0.5vw, 0.3rem) 0 0;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+.tag:hover {
+    opacity: 1;
+}
+
+/* 其他作品卡片 */
+.other-anime-grid {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 25vw, 220px), 1fr));
+}
+
+.other-anime-card {
+    background: var(--card-bg);
+    border-radius: clamp(0.75rem, 1.5vw, 1rem);
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.other-anime-card:hover {
+    transform: translateY(-clamp(0.5rem, 1vw, 0.75rem));
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.other-anime-thumbnail {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.other-anime-thumbnail::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.other-anime-info {
+    padding: clamp(0.75rem, 1.5vw, 1rem);
+    position: relative;
+}
+
+.other-anime-info h4 {
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.other-anime-info p {
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
+    color: #aaa;
+    margin-top: clamp(0.25rem, 0.5vw, 0.3rem);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .home-text {
+        display: none;
+    }
+
+    .home-button {
+        padding: clamp(0.5rem, 1vw, 0.75rem);
+    }
+
+    /* 移动端星星数量减少 */
+    .stars {
+        --star-count: 150;
+    }
+}

@@ -1,11 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>动漫播放页</title>
+    <meta name="ID" th:content="${anime.id}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/anime.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
 </head>
 <body>
-<h1>动漫详情</h1>
-<h2 th:text="${id}">aaaaa</h2>
+    <div id="app">
+        <canvas class="stars" ref="starsCanvas"></canvas>
+        
+        <nav class="navbar">
+            <h1 class="gradient-title" th:text="${anime.title}"></h1>
+            <div class="home-button" @click="goHome">
+                <div class="home-icon"></div>
+                <div class="home-text">返回主页</div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- 播放框 -->
+            <div class="player-box">
+                <div class="player-placeholder">
+                    <div class="play-button" @click="playVideo">
+                        <div class="play-icon"></div>
+                    </div>
+                </div>
+                <div class="player-info">
+                    <h2 class="gradient-title" th:text="${anime.title}"></h2>
+                    <div class="tags">
+                        <span class="tag" th:text="${anime.author}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他作品 -->
+            <h3 class="mb-4 text-xl font-bold">更多推荐</h3>
+            <div class="other-anime-grid">
+                <div class="other-anime-card" v-for="item in otherAnime" :key="item.id">
+                    <div class="other-anime-thumbnail" :style="{ backgroundImage: `url(${item.thumbnail})` }"></div>
+                    <div class="other-anime-info">
+                        <h4>{{ item.title }}</h4>
+                        <p class="text-sm text-gray-400">{{ item.episodes }} 集</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/vue.global.js}"></script>
+    <script th:src="@{/js/anime.js}"></script>
 </body>
-</html>
+</html>    

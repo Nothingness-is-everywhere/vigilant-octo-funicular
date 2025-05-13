@@ -54,7 +54,11 @@ public class AnimeController {
 
     @GetMapping("/home/Anime/{id}")
     public String  showAnimeByIdPage(@PathVariable Long id, Model model) {
-        model.addAttribute("id", id);
+        Optional<Anime> optionalAnime = animeService.getAnimeById(id);
+        if (optionalAnime.isPresent()) {
+            Anime anime = optionalAnime.get();
+            model.addAttribute("anime", anime);
+        }
         return "anime";
     }
 }
