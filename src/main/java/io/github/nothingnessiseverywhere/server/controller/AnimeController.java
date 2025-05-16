@@ -1,28 +1,34 @@
 package io.github.nothingnessiseverywhere.server.controller;
 
 import io.github.nothingnessiseverywhere.server.entity.Anime;
+import io.github.nothingnessiseverywhere.server.handler.AnimeResourceHttpRequestHandler;
 import io.github.nothingnessiseverywhere.server.service.AnimeService;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
 
 @Controller
 public class AnimeController {
 
     // 注入AnimeService
     private final AnimeService animeService;
+    private final AnimeResourceHttpRequestHandler handler;
 
-    public AnimeController(AnimeService animeService) {
+    public AnimeController(AnimeService animeService, AnimeResourceHttpRequestHandler handler) {
         this.animeService = animeService;
+        this.handler = handler;
     }
 
     // 获取所有动漫
@@ -33,56 +39,34 @@ public class AnimeController {
     }
 
     @GetMapping("/getAnimeById/{id}")
-    public ResponseEntity<Resource> streamAnime(@PathVariable Long id, HttpServletRequest request) {
-        // 查询动漫信息
+    public void streamAnime(@PathVariable Long id,
+                            HttpServletRequest request,
+                            HttpServletResponse response) {
         Optional<Anime> animeOpt = animeService.getAnimeById(id);
         if (animeOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            response.setStatus(HttpStatus.NOT_FOUND.value()); // 文件不存在
+            return;
         }
 
-        // 获取文件路径
         File file = new File(animeOpt.get().getStoragePath());
         if (!file.exists()) {
-            return ResponseEntity.notFound().build();
+            response.setStatus(HttpStatus.NOT_FOUND.value()); // 文件不存在
+            return;
         }
 
-        // 创建文件资源
-        Resource resource = new FileSystemResource(file);
+        // 将文件路径存入请求属性，供自定义Handler获取
+        request.setAttribute(AnimeResourceHttpRequestHandler.REQUEST_ATTR_FILE_PATH, file.getAbsolutePath());
 
-        // 设置响应头
-        HttpHeaders headers = new HttpHeaders();
-        headers
-                .setContentType(MediaType.valueOf("video/mp2t"));  // TS流的MIME类型
-        headers
-                .set(HttpHeaders.ACCEPT_RANGES, "bytes");          // 支持字节范围请求
-        headers
-                .setContentLength(file.length());
-
-        // 处理范围请求（用于视频拖放进度）
         try {
-            List<HttpRange> ranges = HttpRange.parseRanges(request.getHeader(HttpHeaders.RANGE));
-            if (!ranges.isEmpty()) {
-                HttpRange range = ranges.get(0);
-                long start = range.getRangeStart(file.length());
-                long end = range.getRangeEnd(file.length());
-                long rangeLength = end - start + 1;
-
-                headers
-                        .set(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + file.length());
-                headers
-                        .setContentLength(rangeLength);
-
-                return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                        .headers(headers)
-                        .body(resource);
+            handler.handleRequest(request, response); // 委托处理器处理请求
+        } catch (IOException | ServletException e) {
+            if ("断开的管道".equals(e.getMessage())) {
+                System.out.println("客户端断开连接，停止传输");
+            } else {
+                System.out.println("视频流错误: " + e);
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
-        } catch (IllegalArgumentException e) {
-            // 处理无效的Range请求
         }
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
     }
 
     // 根据id显示动漫页面

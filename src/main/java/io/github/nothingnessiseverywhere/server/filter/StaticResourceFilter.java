@@ -137,7 +137,7 @@ public class StaticResourceFilter implements Filter {
         if (value == null) {
             randomCookie.setMaxAge(0); // 删除 Cookie
         } else {
-            randomCookie.setMaxAge(600); // 设置有效期为 60 秒
+            randomCookie.setMaxAge(6000); // 设置有效期为 60 秒
         }
         response.addCookie(randomCookie);
     }

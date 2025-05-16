@@ -1,154 +1,99 @@
 const ID = document.querySelector("meta[name='ID']").getAttribute("content");
-    // 引入Vue
-    const { createApp } = Vue;
+const { createApp } = Vue;
 
-    // 创建Vue实例
-    createApp({
-    // 定义数据
+createApp({
     data() {
-    return {
-    // 其他动漫信息
-    otherAnime: [
-{
-    // 动漫ID
-    id: 1,
-    // 动漫标题
-    title: '银河守护者',
-    // 动漫缩略图
-    thumbnail: './images/home.png'
-}
-    ]
-}
-},
-    // 组件挂载后执行
+        return {
+            videoUrl: `/getAnimeById/${ID}`, // 视频流URL
+            loading: false, // 加载状态
+            error: null, // 错误信息
+            otherAnime: [
+                {
+                    id: 1,
+                    title: '银河守护者',
+                    thumbnail: '/images/home.png'
+                }
+            ]
+        };
+    },
     mounted() {
-    // 初始化星星
-    this.initStars();
-},
-    // 定义方法
+        this.initStars();
+        // 初始化时不自动播放，等待用户点击
+    },
     methods: {
-    // 初始化星星
-    initStars() {
-    // 获取canvas元素
-    const canvas = this.$refs.starsCanvas;
-    // 获取canvas上下文
-    const ctx = canvas.getContext('2d');
-    // 定义星星数组
-    let stars = [];
+        // 初始化星星动画（保持不变）
+        initStars() {
+            const canvas = this.$refs.starsCanvas;
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
 
-    // 监听窗口大小变化
-    const resize = () => {
-    // 设置canvas宽高
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
+            class Star {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 1.5 + 0.5;
+                    this.speed = Math.random() * 0.05;
+                    this.alpha = Math.random();
+                }
+                update() {
+                    this.alpha += this.speed;
+                    if (this.alpha > 1 || this.alpha < 0) this.speed *= -1;
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
 
-    // 定义星星类
-    class Star {
-    // 构造函数
-    constructor() {
-    // 重置星星位置
-    this.reset();
-}
+            const animate = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => { star.update(); star.draw(); });
+                requestAnimationFrame(animate);
+            };
 
-    // 重置星星位置
-    reset() {
-    // 随机生成星星位置
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    // 随机生成星星大小
-    this.size = Math.random() * 1.5 + 0.5;
-    // 随机生成星星速度
-    this.speed = Math.random() * 0.05;
-    // 随机生成星星透明度
-    this.alpha = Math.random();
-}
+            window.addEventListener('resize', resize);
+            resize();
+            const starCount = window.innerWidth < 768 ? 150 : 300;
+            stars = Array(starCount).fill().map(() => new Star());
+            animate();
+        },
 
-    // 更新星星位置
-    update() {
-    // 更新星星透明度
-    this.alpha += this.speed;
-    // 如果透明度超过1或小于0，则反转速度
-    if(this.alpha > 1 || this.alpha < 0) this.speed *= -1;
-}
+        // 播放视频（通过点击<video>标签触发）
+        handlePlay() {
+            this.loading = true;
+            const video = this.$refs.videoRef; // 通过ref获取视频元素
 
-    // 绘制星星
-    draw() {
-    // 设置填充颜色
-    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-    // 开始绘制路径
-    ctx.beginPath();
-    // 绘制圆形
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    // 填充颜色
-    ctx.fill();
-}
-}
-
-    // 动画函数
-    function animate() {
-    // 清空画布
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 遍历星星数组，更新并绘制星星
-    stars.forEach(star => {
-    star.update();
-    star.draw();
-});
-
-    // 请求下一帧动画
-    requestAnimationFrame(animate);
-}
-
-    // 监听窗口大小变化事件
-    window.addEventListener('resize', resize);
-    // 初始化窗口大小
-    resize();
-
-    // 根据屏幕尺寸动态调整星星数量
-    const starCount = window.innerWidth < 768 ? 150 : 300;
-    // 创建星星数组
-    stars = Array(starCount).fill().map(() => new Star());
-    // 开始动画
-    animate();
-},
-    // 播放视频
-    playVideo() {
-        const playerPlaceholder = document.querySelector('.player-placeholder');
-        const videoUrl = `/getAnimeById/${ID}`; // 直接使用URL参数
-
-        // 创建视频元素（如果不存在）
-        if (!this.videoElement) {
-            this.videoElement = document.createElement('video');
-            this.videoElement.controls = true; // 显示播放控件
-            this.videoElement.preload = 'auto'; // 自动预加载
-            this.videoElement.style.width = '100%';
-            this.videoElement.style.height = '100%';
-            this.videoElement.className = 'rounded-lg';
-
-            // 错误处理
-            this.videoElement.addEventListener('error', () => {
-                this.error = '视频加载失败，请检查网络或重试';
+            // 手动触发播放（必须在用户交互事件中调用）
+            video.play().then(() => {
+                this.loading = false; // 播放开始后隐藏加载提示
+            }).catch(error => {
+                if (error.name === 'NotAllowedError') {
+                    this.error = '请点击播放按钮开始播放';
+                } else {
+                    this.error = '视频加载失败，请检查网络';
+                }
                 this.loading = false;
             });
+        },
+
+        // 重试加载视频
+        reloadVideo() {
+            const video = this.$refs.videoRef;
+            video.load(); // 重新加载视频源
+            this.error = null;
+            this.loading = true;
+        },
+
+        // 返回首页
+        goHome() {
+            window.location.href = '/home';
         }
-
-        // 设置视频源并播放
-        this.videoElement.src = videoUrl;
-        playerPlaceholder.innerHTML = ''; // 清空占位符
-        playerPlaceholder.appendChild(this.videoElement); // 插入视频元素
-
-        // 处理播放逻辑（支持用户手动点击播放按钮）
-        this.videoElement.play().catch(error => {
-            // 现代浏览器需要用户交互才能自动播放，这里可能需要用户手动点击播放控件
-            this.error = '点击下方播放按钮开始播放';
-            console.log('自动播放失败（需用户交互）:', error);
-        });
-},
-    // 返回首页
-    goHome() {
-        // 跳转到首页
-        window.location.href = '/home'
-}
-}
+    }
 }).mount('#app');
